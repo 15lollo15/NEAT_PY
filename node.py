@@ -22,7 +22,7 @@ class Node:
 
         for conn in self.output_connections:
             if conn.enabled:
-                conn.toNode.input_sum += conn.weight * self.output_value
+                conn.to_node.input_sum += conn.weight * self.output_value
 
     def mutate_bias(self):
         rand = rand_generator.random()
@@ -40,11 +40,11 @@ class Node:
 
         if node.layer < self.layer:
             for conn in node.output_connections:
-                if conn.toNode == self:
+                if conn.to_node == self:
                     return True
         else:
             for conn in self.output_connections:
-                if conn.toNode == node:
+                if conn.to_node == node:
                     return True
 
         return False
