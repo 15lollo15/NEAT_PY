@@ -55,7 +55,7 @@ class Genome:
 
         return result
 
-    def crossover(self, partner):
+    def init_off_spring(self, partner):
         off_spring = Genome(self.inputs, self.outputs, 0, True)
         off_spring.next_node = self.next_node
 
@@ -67,6 +67,10 @@ class Genome:
                     node.activation_function = partner_node.activation_function
                     node.bias = partner_node.bias
             off_spring.nodes.append(node)
+        return off_spring
+
+    def crossover(self, partner):
+        off_spring = self.init_off_spring(partner)
 
         for i in range(len(self.connections)):
             index = self.common_connection(self.connections[i].get_innovation_number(), partner.connections)
