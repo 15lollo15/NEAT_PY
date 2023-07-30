@@ -3,8 +3,9 @@ from connection import Connection
 from settings import rand_generator
 import math
 
+
 class Genome:
-    def __init__(self, inputs, outputs, genome_id, off_spring = False):
+    def __init__(self, inputs, outputs, genome_id, off_spring=False):
         self.inputs = inputs
         self.outputs = outputs
         self.id = genome_id
@@ -26,7 +27,7 @@ class Genome:
             for i in range(self.inputs):
                 for j in range(self.outputs):
                     weight = rand_generator.random() * self.inputs * math.sqrt(2 / self.inputs)
-                    self.connections.append(Connection(self.nodes[i], self.nodes[j], weight));
+                    self.connections.append(Connection(self.nodes[i], self.nodes[j], weight))
 
     def generate_network(self):
         for node in self.nodes:
@@ -35,8 +36,7 @@ class Genome:
         for conn in self.connections:
             conn.from_node.output_connections.append(conn)
 
-        self.sort_by_layer();
-
+        self.sort_by_layer()
 
     def feed_forward(self, input_values):
         self.generate_network()
@@ -47,7 +47,7 @@ class Genome:
         for i in range(self.inputs):
             self.nodes[i].output_value = input_values[i]
 
-        result = [];
+        result = []
         for node in self.nodes:
             node.engage()
             if node.output:
@@ -66,13 +66,14 @@ class Genome:
                 if rand_generator.random() > 0.5:
                     node.activation_function = partner_node.activation_function
                     node.bias = partner_node.bias
-            off_spring.nodes.append(node);
+            off_spring.nodes.append(node)
 
         for i in range(len(self.connections)):
             index = self.common_connection(self.connections[i].get_innovation_number(), partner.connections)
 
             if index != -1:
-                conn = self.connections[i].clone() if rand_generator.random() > .5 else partner.connections[index].clone()
+                conn = self.connections[i].clone() if rand_generator.random() > .5 else partner.connections[
+                    index].clone()
 
                 from_node = off_spring.nodes[off_spring.get_node(conn.from_node.number)]
                 to_node = off_spring.nodes[off_spring.get_node(conn.to_node.number)]
@@ -80,9 +81,9 @@ class Genome:
                 conn.to_node = to_node
 
                 if from_node is not None and to_node is not None:
-                    off_spring.connections.append(conn);
+                    off_spring.connections.append(conn)
             else:
-                conn = self.connections[i].clone();
+                conn = self.connections[i].clone()
 
                 from_node = off_spring.nodes[off_spring.get_node(conn.from_node.number)]
                 to_node = off_spring.nodes[off_spring.get_node(conn.to_node.number)]
@@ -105,8 +106,8 @@ class Genome:
                 node.mutate_bias()
 
         if rand_generator.random() < 0.1:
-            i = rand_generator.randint(0, len(self.nodes) - 1);
-            self.nodes[i].mutate_activation();
+            i = rand_generator.randint(0, len(self.nodes) - 1)
+            self.nodes[i].mutate_activation()
 
         if rand_generator.random() < 0.05:
             self.add_connection()
@@ -115,18 +116,18 @@ class Genome:
             self.add_node()
 
     def add_node(self):
-        connection_index = rand_generator.randint(0, len(self.connections) - 1);
-        picked_connection = self.connections[connection_index];
-        picked_connection.enabled = False;
+        connection_index = rand_generator.randint(0, len(self.connections) - 1)
+        picked_connection = self.connections[connection_index]
+        picked_connection.enabled = False
         self.connections.remove(picked_connection)
 
-        new_node = Node(self.next_node, picked_connection.from_node.layer + 1);
+        new_node = Node(self.next_node, picked_connection.from_node.layer + 1)
         for node in self.nodes:
             if node.layer > picked_connection.from_node.layer:
                 node.layer += 1
 
-        new_connection1 = Connection(picked_connection.from_node, new_node, 1);
-        new_connection2 = Connection(new_node, picked_connection.to_node, picked_connection.weight);
+        new_connection1 = Connection(picked_connection.from_node, new_node, 1)
+        new_connection2 = Connection(new_node, picked_connection.to_node, picked_connection.weight)
 
         self.layers += 1
         self.connections.append(new_connection1)
@@ -134,25 +135,26 @@ class Genome:
         self.nodes.append(new_node)
         self.next_node += 1
 
-
     def add_connection(self):
         if self.fully_connected():
             return
 
-        node1 = rand_generator.randint(0, len(self.nodes) - 1);
-        node2 = rand_generator.randint(0, len(self.nodes) - 1);
+        node1 = rand_generator.randint(0, len(self.nodes) - 1)
+        node2 = rand_generator.randint(0, len(self.nodes) - 1)
 
-        while self.nodes[node1].layer == self.nodes[node2].layer or self.nodes_connected(self.nodes[node1], self.nodes[node2]):
-            node1 = rand_generator.randint(0, len(self.nodes) - 1);
-            node2 = rand_generator.randint(0, len(self.nodes) - 1);
+        while self.nodes[node1].layer == self.nodes[node2].layer or self.nodes_connected(self.nodes[node1],
+                                                                                         self.nodes[node2]):
+            node1 = rand_generator.randint(0, len(self.nodes) - 1)
+            node2 = rand_generator.randint(0, len(self.nodes) - 1)
 
         if self.nodes[node1].layer > self.nodes[node2].layer:
             temp = node1
             node1 = node2
             node2 = temp
 
-        new_connection = Connection(self.nodes[node1], self.nodes[node2], rand_generator.random() * self.inputs * math.sqrt(2 / self.inputs));
-        self.connections.append(new_connection);
+        new_connection = Connection(self.nodes[node1], self.nodes[node2],
+                                    rand_generator.random() * self.inputs * math.sqrt(2 / self.inputs))
+        self.connections.append(new_connection)
 
     @staticmethod
     def common_connection(inn_n, connections):
@@ -161,11 +163,11 @@ class Genome:
                 return i
         return -1
 
-
     def nodes_connected(self, node1, node2):
         for i in range(len(self.connections)):
-            conn = self.connections[i];
-            if (conn.from_node == node1 and conn.to_node == node2) or (conn.from_node == node2 and conn.to_node == node1):
+            conn = self.connections[i]
+            if (conn.from_node == node1 and conn.to_node == node2) or (
+                    conn.from_node == node2 and conn.to_node == node1):
                 return True
 
         return False
@@ -182,7 +184,7 @@ class Genome:
 
         for i in range(self.layers - 1):
             for j in range(i + 1, self.layers):
-                max_connections += nodes_per_layer[i] * nodes_per_layer[j];
+                max_connections += nodes_per_layer[i] * nodes_per_layer[j]
 
         return max_connections == len(self.connections)
 
@@ -190,11 +192,10 @@ class Genome:
         self.nodes.sort(key=lambda n: n.layer)
 
     def clone(self):
-        clone = Genome(self.inputs, self.outputs, self.id);
+        clone = Genome(self.inputs, self.outputs, self.id)
         clone.nodes = self.nodes.copy()
         clone.connections = self.connections.copy()
-        return clone;
-
+        return clone
 
     def get_node(self, x):
         for i in range(len(self.nodes)):
@@ -203,7 +204,5 @@ class Genome:
 
         return -1
 
-
     def calculate_weight(self):
         return len(self.connections) + len(self.nodes)
-

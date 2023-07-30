@@ -1,5 +1,6 @@
 from genome import Genome
 
+
 class Agent:
     def __init__(self, agent_id: int, num_input: int, num_output: int):
         self.brain = Genome(num_input, num_output, agent_id)
@@ -17,4 +18,3 @@ class Agent:
 
         child.brain.mutate()
         return child
-

@@ -1,6 +1,7 @@
 from agent import Agent
 from settings import rand_generator
 
+
 class Population:
     def __init__(self, size):
         self.agents = []
@@ -18,7 +19,7 @@ class Population:
         return max_f
 
     def natural_selection(self):
-        max_f = self.max_fitness();
+        max_f = self.max_fitness()
         for agent in self.agents:
             agent.fitness /= max_f
 

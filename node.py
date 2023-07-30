@@ -1,7 +1,7 @@
 from settings import rand_generator
 import math
 
-activationsNames = ["Sigmoid", "Identity", "Step", "Tanh", "ReLu"]
+activationsNames = ["Sigmoid", "Identity", "Step", "Tan", "ReLu"]
 
 
 class Node:
@@ -62,8 +62,8 @@ class Node:
             return x
         if self.activation_function == 2:  # Step
             return 1 if x > 0 else 0
-        if self.activation_function == 3:  # Tanh
-            return math.tanh(x);
+        if self.activation_function == 3:  # Tan
+            return math.tanh(x)
         if self.activation_function == 4:  # ReLu
             return 0 if x < 0 else x
-        return 1 / (1 + math.pow(math.E, -4.9 * x))
+        return 1 / (1 + math.exp(-4.9 * x))
