@@ -58,22 +58,15 @@ class Population:
         avg_sum: float = self.avg_sum()
         for s in self.species:
             child = s.champion.clone()
-            for c in child.brain.connections:
-                if c.from_node.number == c.to_node.number:
-                    exit()
             new_pop.append(child)
             child_num: int = int((s.avg_fitness / avg_sum) * self.population_size) - 1
             if child_num < 0:
                 continue
             for _ in range(child_num):
                 child = s.pull_child()
-                for c in child.brain.connections:
-                    if c.from_node.number == c.to_node.number:
-                        exit()
                 new_pop.append(child)
 
         while len(new_pop) < self.population_size:
-            child = None
             if len(self.species) >= 1:
                 child = self.species[0].pull_child()
             else:

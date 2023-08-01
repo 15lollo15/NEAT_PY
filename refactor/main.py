@@ -27,7 +27,3 @@ for _ in range(10000):
     # if best == 5:
     #     exit()
     pop.natural_selection()
-    for a in pop.agents:
-        for c in a.brain.connections:
-            if c.to_node.number == c.from_node.number:
-                exit()

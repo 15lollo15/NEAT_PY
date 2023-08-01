@@ -24,13 +24,7 @@ class Species:
         parent_1: Agent = rng.choices(self.agents, weights=weights)[0]
         parent_2: Agent = rng.choices(self.agents, weights=weights)[0]
         child = parent_1.crossover(parent_2)
-        for c in child.brain.connections:
-            if c.from_node.number == c.to_node.number:
-                exit()
         child.mutate()
-        for c in child.brain.connections:
-            if c.from_node.number == c.to_node.number:
-                exit()
         return child
 
     def is_empty(self) -> bool:

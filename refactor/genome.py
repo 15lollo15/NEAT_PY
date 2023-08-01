@@ -130,10 +130,6 @@ class Genome:
         picked_connection.enabled = False
         self.connections.remove(picked_connection)
 
-        for n in self.nodes:
-            if n.number == self.next_node:
-                exit()
-
         new_node: Node = Node(self.next_node, picked_connection.from_node.layer + 1)
         for node in self.nodes:
             if node.layer > picked_connection.from_node.layer:
@@ -220,16 +216,8 @@ class Genome:
         if rng.random() < NEW_CONNECTION_PROBABILITY:
             self.add_connection()
 
-        for c in self.connections:
-            if c.to_node.number == c.from_node.number:
-                exit()
-
         if rng.random() < NEW_NODE_PROBABILITY:
             self.add_node()
-
-        for c in self.connections:
-            if c.to_node.number == c.from_node.number:
-                exit()
 
         if self.layers == 2 and len(self.nodes) > 3:
             raise Exception('aj capit, la vendetta')
@@ -240,10 +228,6 @@ class Genome:
         clone.connections = self.connections.copy()
         clone.layers = self.layers
         clone.next_node = self.next_node
-
-        for c in clone.nodes:
-            if c.number >= clone.next_node:
-                exit()
 
         return clone
 
