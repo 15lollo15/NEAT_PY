@@ -179,17 +179,9 @@ class Genome:
         node1: int = rng.randint(0, len(self.nodes) - 1)
         node2: int = rng.randint(0, len(self.nodes) - 1)
 
-        count = 0
         while self.nodes[node1].layer == self.nodes[node2].layer or self.nodes_connected(self.nodes[node1], self.nodes[node2]):
             node1 = rng.randint(0, len(self.nodes) - 1)
             node2 = rng.randint(0, len(self.nodes) - 1)
-            count += 1
-            if count > 100000:
-                print('is happened')
-                tmp = self.fully_connected()
-
-        if self.nodes[node1].layer == self.nodes[node2].layer:
-            pass
 
         if self.nodes[node1].layer > self.nodes[node2].layer:
             temp = node1
@@ -238,9 +230,9 @@ class Genome:
     def get_last_elem(array: []) -> Any:
         return array[len(array) - 1]
 
-    def similarity(self, other, n: int, exceed_penalty: float, disjoint_penalty: float, w_diff_penalty: float) -> float:
+    def similarity(self, other: 'Genome', n: int, exceed_penalty: float, disjoint_penalty: float, w_diff_penalty: float) -> float:
         this_connections = self.connections.copy()
-        other_connections = self.connections.copy()
+        other_connections = other.connections.copy()
         this_connections.sort(key=(lambda c: c.get_innovation_number()))
         other_connections.sort(key=(lambda c: c.get_innovation_number()))
 
