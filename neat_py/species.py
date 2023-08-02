@@ -1,7 +1,7 @@
 from typing import List
 
 from neat_py.agent import Agent
-from neat_py.neat_settings import rng
+from neat_py.neat_settings import Settings
 
 
 class Species:
@@ -21,8 +21,8 @@ class Species:
 
     def pull_child(self) -> Agent:
         weights: List[float] = [a.fitness for a in self.agents]
-        parent_1: Agent = rng.choices(self.agents, weights=weights)[0]
-        parent_2: Agent = rng.choices(self.agents, weights=weights)[0]
+        parent_1: Agent = Settings.rng.choices(self.agents, weights=weights)[0]
+        parent_2: Agent = Settings.rng.choices(self.agents, weights=weights)[0]
         child = parent_1.crossover(parent_2)
         child.mutate()
         return child
@@ -39,7 +39,7 @@ class Species:
     def update_old_fitness(self):
         now_fitness = self.champion.fitness
         delta = now_fitness - self.old_fitness
-        if delta <= 0:
+        if delta < 0:
             self.generation_without_improvement += 1
         else:
             self.generation_without_improvement = 0

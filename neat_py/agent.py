@@ -1,7 +1,7 @@
 from typing import List
 
 from neat_py.genome import Genome
-from neat_py.neat_settings import EXCEED_PENALTY, DISJOINT_PENALTY, WEIGHT_DIFFERENCE_PENALTY
+from neat_py.neat_settings import Settings
 
 
 class Agent:
@@ -29,7 +29,8 @@ class Agent:
 
     def similarity(self, agent: 'Agent', n: int):
         agent_brain: Genome = agent.brain
-        return self.brain.similarity(agent_brain, n, EXCEED_PENALTY, DISJOINT_PENALTY, WEIGHT_DIFFERENCE_PENALTY)
+        return self.brain.similarity(agent_brain, n, Settings.EXCEED_PENALTY, Settings.DISJOINT_PENALTY,
+                                     Settings.WEIGHT_DIFFERENCE_PENALTY)
 
     def clone(self) -> 'Agent':
         clone: 'Agent' = Agent(self.agent_id, self.num_input, self.num_output, off_spring=True)

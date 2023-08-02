@@ -3,9 +3,7 @@ from typing import List, Dict, Any
 
 from neat_py.connection import Connection
 from neat_py.node import Node
-from neat_py.neat_settings import rng, AF_BIAS_PARTNER_INHERIT_PROBABILITY, \
-    CONNECTIONS_PARTNER_INHERIT_PROBABILITY, WEIGHT_MUTATION_PROBABILITY, BIAS_MUTATION_PROBABILITY, \
-    ACTIVATION_MUTATION_PROBABILITY, NEW_CONNECTION_PROBABILITY, NEW_NODE_PROBABILITY
+from neat_py.neat_settings import Settings
 
 
 class Genome:
@@ -35,7 +33,7 @@ class Genome:
 
         for i in range(self.inputs):
             for j in range(self.inputs, self.inputs + self.outputs):
-                weight: float = rng.random() * self.inputs * math.sqrt(2 / self.inputs)
+                weight: float = Settings.rng.random() * self.inputs * math.sqrt(2 / self.inputs)
                 self.connections.append(Connection(self.nodes[i], self.nodes[j], weight))
 
     def sort_by_layer(self) -> None:
@@ -89,7 +87,7 @@ class Genome:
             node: Node = self.nodes[i].clone()
             if node.is_output:
                 partner_node: Node = partner.nodes[partner.get_node(node.number)]
-                if rng.random() > AF_BIAS_PARTNER_INHERIT_PROBABILITY:
+                if Settings.rng.random() > Settings.AF_BIAS_PARTNER_INHERIT_PROBABILITY:
                     node.activation = partner_node.activation
                     node.bias = partner_node.bias
             off_spring.nodes.append(node)
@@ -102,8 +100,9 @@ class Genome:
             index: int = self.common_connection(self.connections[i].get_innovation_number(), partner.connections)
 
             if index != -1:
-                conn = self.connections[i].clone() if rng.random() > CONNECTIONS_PARTNER_INHERIT_PROBABILITY else \
-                    partner.connections[index].clone()
+                conn = self.connections[i].clone() \
+                    if Settings.rng.random() > Settings.CONNECTIONS_PARTNER_INHERIT_PROBABILITY \
+                    else partner.connections[index].clone()
             else:
                 conn: Connection = self.connections[i].clone()
 
@@ -120,7 +119,7 @@ class Genome:
         return off_spring
 
     def add_node(self) -> None:
-        picked_connection: Connection = rng.choice(self.connections)
+        picked_connection: Connection = Settings.rng.choice(self.connections)
         picked_connection.enabled = False
         self.connections.remove(picked_connection)
 
@@ -147,8 +146,7 @@ class Genome:
 
         return False
 
-    def fully_connected(self) -> bool:
-        max_connections: int = 0
+    def compute_nodes_per_layer(self) -> Dict[int, int]:
         nodes_per_layer: Dict[int, int] = {}
 
         for node in self.nodes:
@@ -157,7 +155,12 @@ class Genome:
             else:
                 nodes_per_layer[node.layer] = 1
 
-        #for i in range(self.layers - 1):
+        return nodes_per_layer
+
+    def fully_connected(self) -> bool:
+        max_connections: int = 0
+        nodes_per_layer: Dict[int, int] = self.compute_nodes_per_layer()
+
         for i in range(self.layers):
             for j in range(i + 1, self.layers):
                 max_connections += nodes_per_layer[i] * nodes_per_layer[j]
@@ -167,12 +170,12 @@ class Genome:
     def add_connection(self) -> None:
         if self.fully_connected():
             return
-        node1: int = rng.randint(0, len(self.nodes) - 1)
-        node2: int = rng.randint(0, len(self.nodes) - 1)
+        node1: int = Settings.rng.randint(0, len(self.nodes) - 1)
+        node2: int = Settings.rng.randint(0, len(self.nodes) - 1)
 
         while self.nodes[node1].layer == self.nodes[node2].layer or self.nodes_connected(self.nodes[node1], self.nodes[node2]):
-            node1 = rng.randint(0, len(self.nodes) - 1)
-            node2 = rng.randint(0, len(self.nodes) - 1)
+            node1 = Settings.rng.randint(0, len(self.nodes) - 1)
+            node2 = Settings.rng.randint(0, len(self.nodes) - 1)
 
         if self.nodes[node1].layer > self.nodes[node2].layer:
             temp = node1
@@ -180,26 +183,26 @@ class Genome:
             node2 = temp
 
         new_connection = Connection(self.nodes[node1], self.nodes[node2],
-                                    rng.random() * self.inputs * math.sqrt(2 / self.inputs))
+                                    Settings.rng.random() * self.inputs * math.sqrt(2 / self.inputs))
         self.connections.append(new_connection)
 
     def mutate(self) -> None:
-        if rng.random() < WEIGHT_MUTATION_PROBABILITY:
+        if Settings.rng.random() < Settings.WEIGHT_MUTATION_PROBABILITY:
             for conn in self.connections:
                 conn.mutate_weight()
 
-        if rng.random() < BIAS_MUTATION_PROBABILITY:
+        if Settings.rng.random() < Settings.BIAS_MUTATION_PROBABILITY:
             for node in self.nodes:
                 node.mutate_bias()
 
-        if rng.random() < ACTIVATION_MUTATION_PROBABILITY:
-            i = rng.randint(0, len(self.nodes) - 1)
+        if Settings.rng.random() < Settings.ACTIVATION_MUTATION_PROBABILITY:
+            i = Settings.rng.randint(0, len(self.nodes) - 1)
             self.nodes[i].mutate_activation()
 
-        if rng.random() < NEW_CONNECTION_PROBABILITY:
+        if Settings.rng.random() < Settings.NEW_CONNECTION_PROBABILITY:
             self.add_connection()
 
-        if rng.random() < NEW_NODE_PROBABILITY:
+        if Settings.rng.random() < Settings.NEW_NODE_PROBABILITY:
             self.add_node()
 
     def clone(self) -> 'Genome':

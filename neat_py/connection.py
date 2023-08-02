@@ -1,5 +1,5 @@
 import neat_py.node as node
-from neat_py.neat_settings import rng, WEIGHT_RESET_PROBABILITY
+from neat_py.neat_settings import Settings
 
 
 class Connection:
@@ -10,10 +10,10 @@ class Connection:
         self.enabled: bool = enabled
 
     def mutate_weight(self) -> None:
-        if rng.random() < WEIGHT_RESET_PROBABILITY:
+        if Settings.rng.random() < Settings.WEIGHT_RESET_PROBABILITY:
             self.weight = node.random_float(-1, 1)
         else:
-            self.weight += rng.gauss(0, 1) / 50
+            self.weight += Settings.rng.gauss(0, 1) / 50
 
     def clone(self) -> 'Connection':
         return Connection(self.from_node, self.to_node, self.weight, self.enabled)

@@ -2,7 +2,7 @@ from typing import List, Callable
 
 from neat_py.agent import Agent
 from neat_py.species import Species
-from neat_py.neat_settings import DIFF_THRESHOLD, PATIENCE, rng, NUM_GENERATIONS
+from neat_py.neat_settings import Settings
 
 
 class Population:
@@ -18,11 +18,12 @@ class Population:
         self.species: List[Species] = []
         self.specialise()
         self.gen = 0
+        self.best: Agent = None
 
     def kill_not_improved(self) -> None:
         to_remove: List[Species] = []
         for s in self.species:
-            if s.generation_without_improvement > PATIENCE:
+            if s.generation_without_improvement > Settings.PATIENCE:
                 to_remove.append(s)
 
         for s in to_remove:
@@ -39,8 +40,8 @@ class Population:
         weights = [a.fitness for a in self.agents]
         new_pop = []
         for _ in range(self.population_size):
-            parent_1 = rng.choices(self.agents, weights=weights)[0]
-            parent_2 = rng.choices(self.agents, weights=weights)[0]
+            parent_1 = Settings.rng.choices(self.agents, weights=weights)[0]
+            parent_2 = Settings.rng.choices(self.agents, weights=weights)[0]
             child = parent_1.crossover(parent_2)
             child.mutate()
             new_pop.append(child)
@@ -51,6 +52,8 @@ class Population:
             s.update_fitness()
             s.update_old_fitness()
         self.species.sort(key=(lambda x: x.fitness), reverse=True)
+        self.best = self.species[0].champion
+        self.kill_not_improved()
         for s in self.species:
             s.cut()
             s.apply_fitness_sharing()
@@ -91,7 +94,7 @@ class Population:
             s.reset()
 
         for agent in self.agents:
-            min_diff = DIFF_THRESHOLD
+            min_diff = Settings.DIFF_THRESHOLD
             min_diff_index = -1
             for i, s in enumerate(self.species):
                 rep = s.rep
@@ -107,8 +110,7 @@ class Population:
 
         self.remove_empty_species()
 
-
-    def evolve(self, fitness_function: Callable[['Population'], None], num_generation:int = NUM_GENERATIONS):
+    def evolve(self, fitness_function: Callable[['Population'], None], num_generation:int = Settings.NUM_GENERATIONS):
         for g in range(num_generation):
             self.gen = g
             fitness_function(self)
