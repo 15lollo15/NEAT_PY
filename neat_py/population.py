@@ -52,7 +52,8 @@ class Population:
             s.update_fitness()
             s.update_old_fitness()
         self.species.sort(key=(lambda x: x.fitness), reverse=True)
-        self.best = self.species[0].champion
+        if self.best is None or self.species[0].champion.fitness > self.best.fitness:
+            self.best = self.species[0].champion.clone()
         self.kill_not_improved()
         for s in self.species:
             s.cut()
@@ -60,8 +61,10 @@ class Population:
             s.update_avg()
         new_pop = []
         avg_sum: float = self.avg_sum()
+        if self.best is not None:
+            new_pop.append(self.best.clone())
         for s in self.species:
-            child_num: int = int((s.avg_fitness / avg_sum) * self.population_size) - 1
+            child_num: int = int((s.avg_fitness / avg_sum) * (self.population_size-1)) - 1
             if child_num < 0:
                 continue
             child = s.champion.clone()
