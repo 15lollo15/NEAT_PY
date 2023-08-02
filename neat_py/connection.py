@@ -1,5 +1,5 @@
-import node
-from neat_settings import rng, WEIGHT_RESET_PROBABILITY
+import neat_py.node as node
+from neat_py.neat_settings import rng, WEIGHT_RESET_PROBABILITY
 
 
 class Connection:
@@ -8,9 +8,6 @@ class Connection:
         self.to_node: 'node.Node' = to_node
         self.weight: float = weight
         self.enabled: bool = enabled
-
-        if from_node.layer >= to_node.layer:
-            raise Exception('Nooooooooooooooooooooooooo')
 
     def mutate_weight(self) -> None:
         if rng.random() < WEIGHT_RESET_PROBABILITY:

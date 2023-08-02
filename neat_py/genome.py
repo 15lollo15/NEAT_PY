@@ -1,9 +1,9 @@
 import math
 from typing import List, Dict, Any
 
-from connection import Connection
-from node import Node
-from neat_settings import rng, AF_BIAS_PARTNER_INHERIT_PROBABILITY, \
+from neat_py.connection import Connection
+from neat_py.node import Node
+from neat_py.neat_settings import rng, AF_BIAS_PARTNER_INHERIT_PROBABILITY, \
     CONNECTIONS_PARTNER_INHERIT_PROBABILITY, WEIGHT_MUTATION_PROBABILITY, BIAS_MUTATION_PROBABILITY, \
     ACTIVATION_MUTATION_PROBABILITY, NEW_CONNECTION_PROBABILITY, NEW_NODE_PROBABILITY
 
@@ -23,9 +23,6 @@ class Genome:
 
         if not off_spring:
             self.build()
-
-        if self.layers == 2 and len(self.nodes) > 3:
-            raise Exception('aj capit, la vendetta 3')
 
     def build(self) -> None:
         for _ in range(self.inputs):
@@ -120,9 +117,6 @@ class Genome:
 
         off_spring.layers = self.layers
 
-        if off_spring.layers == 2 and len(off_spring.nodes) > 3:
-            raise Exception('aj capit, la vendetta 2')
-
         return off_spring
 
     def add_node(self) -> None:
@@ -143,9 +137,6 @@ class Genome:
         self.connections.append(new_connection2)
         self.nodes.append(new_node)
         self.next_node += 1
-
-        if self.layers == 2 and len(self.nodes) > 3:
-            raise Exception('aj capit')
 
     def nodes_connected(self, node1: Node, node2: Node) -> bool:
         for i in range(len(self.connections)):
@@ -210,9 +201,6 @@ class Genome:
 
         if rng.random() < NEW_NODE_PROBABILITY:
             self.add_node()
-
-        if self.layers == 2 and len(self.nodes) > 3:
-            raise Exception('aj capit, la vendetta')
 
     def clone(self) -> 'Genome':
         clone: Genome = Genome(self.genome_id, self.inputs, self.outputs)

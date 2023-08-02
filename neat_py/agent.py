@@ -1,7 +1,7 @@
 from typing import List
 
-from genome import Genome
-from neat_settings import EXCEED_PENALTY, DISJOINT_PENALTY, WEIGHT_DIFFERENCE_PENALTY
+from neat_py.genome import Genome
+from neat_py.neat_settings import EXCEED_PENALTY, DISJOINT_PENALTY, WEIGHT_DIFFERENCE_PENALTY
 
 
 class Agent:

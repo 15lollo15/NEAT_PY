@@ -1,8 +1,8 @@
 from typing import List, Callable
 
-from agent import Agent
-from species import Species
-from neat_settings import DIFF_THRESHOLD, PATIENCE, rng, NUM_GENERATIONS
+from neat_py.agent import Agent
+from neat_py.species import Species
+from neat_py.neat_settings import DIFF_THRESHOLD, PATIENCE, rng, NUM_GENERATIONS
 
 
 class Population:
@@ -17,6 +17,7 @@ class Population:
 
         self.species: List[Species] = []
         self.specialise()
+        self.gen = 0
 
     def kill_not_improved(self) -> None:
         to_remove: List[Species] = []
@@ -108,7 +109,8 @@ class Population:
 
 
     def evolve(self, fitness_function: Callable[['Population'], None], num_generation:int = NUM_GENERATIONS):
-        for gen in range(num_generation):
+        for g in range(num_generation):
+            self.gen = g
             fitness_function(self)
             self.natural_selection()
 

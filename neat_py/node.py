@@ -1,5 +1,5 @@
-import connection
-from neat_settings import rng, BIAS_RESET_PROBABILITY
+import neat_py.connection as connection
+from neat_py.neat_settings import rng, BIAS_RESET_PROBABILITY
 from typing import Callable, List
 import math
 

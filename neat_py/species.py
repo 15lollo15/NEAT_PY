@@ -1,7 +1,7 @@
 from typing import List
 
-from agent import Agent
-from neat_settings import rng
+from neat_py.agent import Agent
+from neat_py.neat_settings import rng
 
 
 class Species:
