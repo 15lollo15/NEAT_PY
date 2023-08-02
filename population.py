@@ -1,8 +1,8 @@
-from typing import List
+from typing import List, Callable
 
-from refactor.agent import Agent
-from refactor.species import Species
-from settings import DIFF_THRESHOLD, PATIENCE, rng
+from agent import Agent
+from species import Species
+from neat_settings import DIFF_THRESHOLD, PATIENCE, rng, NUM_GENERATIONS
 
 
 class Population:
@@ -57,11 +57,11 @@ class Population:
         new_pop = []
         avg_sum: float = self.avg_sum()
         for s in self.species:
-            child = s.champion.clone()
-            new_pop.append(child)
             child_num: int = int((s.avg_fitness / avg_sum) * self.population_size) - 1
             if child_num < 0:
                 continue
+            child = s.champion.clone()
+            new_pop.append(child)
             for _ in range(child_num):
                 child = s.pull_child()
                 new_pop.append(child)
@@ -107,6 +107,10 @@ class Population:
         self.remove_empty_species()
 
 
+    def evolve(self, fitness_function: Callable[['Population'], None], num_generation:int = NUM_GENERATIONS):
+        for gen in range(num_generation):
+            fitness_function(self)
+            self.natural_selection()
 
 
 

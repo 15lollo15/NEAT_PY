@@ -1,7 +1,7 @@
 from typing import List
 
-from refactor.genome import Genome
-from settings import EXCEED_PENALTY, DISJOINT_PENALTY, WEIGHT_DIFFERENCE_PENALTY
+from genome import Genome
+from neat_settings import EXCEED_PENALTY, DISJOINT_PENALTY, WEIGHT_DIFFERENCE_PENALTY
 
 
 class Agent:

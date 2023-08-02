@@ -1,17 +1,14 @@
-from refactor.population import Population
-from settings import rng
+from population import Population
 
-pop = Population(100, 2, 1)
 
-x = [
-        [0, 0],
-        [0, 1],
-        [1, 0],
-        [1, 1]
-    ]
-output = [0, 1, 1, 0]
-
-for _ in range(10000):
+def my_fitness_function(pop: Population):
+    x = [
+            [0, 0],
+            [0, 1],
+            [1, 0],
+            [1, 1]
+        ]
+    output = [0, 1, 1, 0]
     for agent in pop.agents:
         agent.fitness = 1
         for i in range(len(x)):
@@ -24,6 +21,8 @@ for _ in range(10000):
         if agent.fitness > best:
             best = agent.fitness
     print(best)
-    # if best == 5:
-    #     exit()
-    pop.natural_selection()
+
+
+if __name__ == '__main__':
+    pop = Population(100, 2, 1)
+    pop.evolve(my_fitness_function)

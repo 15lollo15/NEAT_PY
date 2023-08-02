@@ -1,5 +1,5 @@
 import node
-from settings import rng, WEIGHT_RESET_PROBABILITY
+from neat_settings import rng, WEIGHT_RESET_PROBABILITY
 
 
 class Connection:

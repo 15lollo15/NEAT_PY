@@ -1,5 +1,5 @@
 import connection
-from settings import rng, BIAS_RESET_PROBABILITY
+from neat_settings import rng, BIAS_RESET_PROBABILITY
 from typing import Callable, List
 import math
 
@@ -47,7 +47,7 @@ class Node:
         self.activation = rng.choice(activations_functions)
 
     @staticmethod
-    def contains(connections: List[connection.Connection], to_find: 'Node'):
+    def contains(connections: List['connection.Connection'], to_find: 'Node'):
         for conn in connections:
             if conn.to_node == to_find:
                 return True

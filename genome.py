@@ -1,9 +1,9 @@
 import math
 from typing import List, Dict, Any
 
-from refactor.connection import Connection
-from refactor.node import Node
-from settings import rng, AF_BIAS_PARTNER_INHERIT_PROBABILITY, \
+from connection import Connection
+from node import Node
+from neat_settings import rng, AF_BIAS_PARTNER_INHERIT_PROBABILITY, \
     CONNECTIONS_PARTNER_INHERIT_PROBABILITY, WEIGHT_MUTATION_PROBABILITY, BIAS_MUTATION_PROBABILITY, \
     ACTIVATION_MUTATION_PROBABILITY, NEW_CONNECTION_PROBABILITY, NEW_NODE_PROBABILITY
 

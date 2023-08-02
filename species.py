@@ -1,7 +1,7 @@
 from typing import List
 
-from refactor.agent import Agent
-from settings import rng
+from agent import Agent
+from neat_settings import rng
 
 
 class Species:
