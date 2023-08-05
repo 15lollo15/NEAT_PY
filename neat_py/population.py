@@ -1,4 +1,4 @@
-from typing import List, Callable
+from typing import List, Callable, Optional
 
 from neat_py.agent import Agent
 from neat_py.species import Species
@@ -18,7 +18,7 @@ class Population:
         self.species: List[Species] = []
         self.specialise()
         self.gen = 0
-        self.best: Agent = None
+        self.best: Optional[Agent] = None
 
     def kill_not_improved(self) -> None:
         to_remove: List[Species] = []
