@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 setup(
-    name='neat_py',
+    name='neat_py_lollo',
     packages=find_packages(include=['neat_py']),
     version='0.0.1',
     description='Python NEAT implementation',
