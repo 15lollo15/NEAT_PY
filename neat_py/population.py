@@ -113,7 +113,7 @@ class Population:
 
         self.remove_empty_species()
 
-    def evolve(self, fitness_function: Callable[['Population'], None], num_generation:int = Settings.NUM_GENERATIONS):
+    def evolve(self, fitness_function: Callable[['Population'], None], num_generation: int = Settings.NUM_GENERATIONS):
         for g in range(num_generation):
             self.gen = g
             fitness_function(self)
