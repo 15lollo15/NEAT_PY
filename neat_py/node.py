@@ -3,12 +3,33 @@ from neat_py.neat_settings import Settings
 from typing import Callable, List
 import math
 
+
+def sigmoid(x: float) -> float:
+    return 1 / (1 + math.exp(-4.9 * x))
+
+
+def identity(x: float) -> float:
+    return x
+
+
+def step(x: float) -> float:
+    x: 1 if x > 0 else 0
+
+
+def tanh(x: float) -> float:
+    return math.tanh(x)
+
+
+def relu(x: float) -> float:
+    return 0 if x < 0 else x
+
+
 activations_functions = [
-    lambda x: 1 / (1 + math.exp(-4.9 * x)),
-    lambda x: x,
-    lambda x: 1 if x > 0 else 0,
-    lambda x: math.tanh(x),
-    lambda x: 0 if x < 0 else x
+    sigmoid,
+    identity,
+    step,
+    tanh,
+    relu
 ]
 
 
