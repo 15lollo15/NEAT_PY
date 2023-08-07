@@ -5,22 +5,52 @@ import math
 
 
 def sigmoid(x: float) -> float:
+    """
+    Apply sigmoid
+    :rtype: float
+    :param x: input value
+    :return: the sigmoid of the input value
+    """
     return 1 / (1 + math.exp(-4.9 * x))
 
 
 def identity(x: float) -> float:
+    """
+    Return the same value that you input
+    :rtype: float
+    :param x: input value
+    :return: the input value
+    """
     return x
 
 
 def step(x: float) -> float:
-    x: 1 if x > 0 else 0
+    """
+    Return 1 if the input value is grater than 0, 0 otherwise
+    :rtype: float
+    :param x: input value
+    :return: 1 if the input value is grater than 0, 0 otherwise
+    """
+    return 1 if x > 0 else 0
 
 
 def tanh(x: float) -> float:
+    """
+    Apply tanh
+    :rtype: float
+    :param x: input value
+    :return: the tanh of the input value
+    """
     return math.tanh(x)
 
 
 def relu(x: float) -> float:
+    """
+    Return 0 if the input value is smaller than 0, the input value otherwise
+    :rtype: float
+    :param x: input value
+    :return: 0 if the input value is smaller than 0, the input value otherwise
+    """
     return 0 if x < 0 else x
 
 
@@ -33,13 +63,29 @@ activations_functions = [
 ]
 
 
-def random_float(start: float, end: float):
+def random_float(start: float, end: float) -> float:
+    """
+    Return a random float between *start* and *end*
+    :rtype: float
+    :param start: Start value
+    :param end: End Value
+    :return: A random float between *start* and *end*
+    """
     range_size = math.fabs(end - start)
     return Settings.rng.random() * range_size - end
 
 
 class Node:
+    """
+    A class that represent a node of a neural network
+    """
     def __init__(self, number: int, layer: int, is_output: bool = False) -> None:
+        """
+        Construct a node with the specified *number*, *layer*
+        :param number: Number of the node
+        :param layer: Layer of the node inside the network
+        :param is_output: Optional parameter to specify that this node is an *output node*
+        """
         self.number: int = number
         self.layer: int = layer
         self.is_output: bool = is_output
