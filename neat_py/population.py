@@ -70,8 +70,13 @@ class Population:
             child = s.champion.clone()
             new_pop.append(child)
             for _ in range(child_num):
+                if len(new_pop) > self.population_size:
+                    break
                 child = s.pull_child()
                 new_pop.append(child)
+
+            if len(new_pop) > self.population_size:
+                break
 
         while len(new_pop) < self.population_size:
             if len(self.species) >= 1:
@@ -119,6 +124,18 @@ class Population:
             fitness_function(self)
             self.natural_selection()
 
+            if len(self.agents) > self.population_size:
+                raise Exception('Invalid pop size')
+
+    def evolve_classic(self, fitness_function: Callable[['Population'], None],
+                       num_generation: int = Settings.NUM_GENERATIONS):
+        for g in range(num_generation):
+            self.gen = g
+            fitness_function(self)
+            self.natural_selection_classic()
+
+            if len(self.agents) > self.population_size:
+                raise Exception('Invalid pop size')
 
 
 
