@@ -43,7 +43,6 @@ class Population:
             parent_1 = Settings.rng.choices(self.agents, weights=weights)[0]
             parent_2 = Settings.rng.choices(self.agents, weights=weights)[0]
             child = parent_1.crossover(parent_2)
-            child.mutate()
             new_pop.append(child)
         self.agents = new_pop
 

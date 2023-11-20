@@ -25,6 +25,7 @@ class Agent:
             child.brain = self.brain.crossover(agent.brain)
         else:
             child.brain = agent.brain.crossover(self.brain)
+        child.brain.mutate()
         return child
 
     def similarity(self, agent: 'Agent', n: int):
