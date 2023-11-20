@@ -14,11 +14,14 @@ class Population:
         self.agents: List[Agent] = []
         for i in range(self.population_size):
             self.agents.append(Agent(i, self.num_input, self.num_output))
+            self.agents[i].brain.generate_network()
+            self.agents[i].brain.mutate()
 
         self.species: List[Species] = []
         self.specialise()
         self.gen = 0
         self.best: Optional[Agent] = None
+        self.best_fitness = 0
 
     def kill_not_improved(self) -> None:
         to_remove: List[Species] = []
@@ -35,7 +38,20 @@ class Population:
             avg_sum += s.avg_fitness
         return avg_sum
 
+    def calculate_fitness(self):
+        current_max = 0
+        for agent in self.agents:
+            if agent.fitness > self.best_fitness:
+                self.best_fitness = agent.fitness
+                self.best = agent.clone()
+
+            if agent.fitness > current_max:
+                current_max = agent.fitness
+        for agent in self.agents:
+            agent.fitness /= current_max
+
     def natural_selection_classic(self) -> None:
+        self.calculate_fitness()
         self.agents.sort(key=(lambda x: x.fitness), reverse=True)
         weights = [a.fitness for a in self.agents]
         new_pop = []
