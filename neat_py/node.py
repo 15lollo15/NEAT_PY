@@ -125,8 +125,8 @@ class Node:
             return False
 
         if node.layer < self.layer:
-            return self.contains(node.output_connections, self)
-        return self.contains(self.output_connections, node)
+            return Node.contains(node.output_connections, self)
+        return Node.contains(self.output_connections, node)
 
     def clone(self) -> 'Node':
         node = Node(self.number, self.layer, self.is_output)
