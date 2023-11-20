@@ -28,7 +28,7 @@ class Genome:
             self.next_node += 1
 
         for _ in range(self.outputs):
-            self.nodes.append(Node(self.next_node, 1, is_output=True))
+            self.nodes.append(Node(self.next_node, 1, True))
             self.next_node += 1
 
         for i in range(self.inputs):
@@ -80,7 +80,7 @@ class Genome:
         return -1
 
     def init_off_spring(self, partner: 'Genome') -> 'Genome':
-        off_spring: Genome = Genome(0, self.inputs, self.outputs, off_spring=True)
+        off_spring: Genome = Genome(0, self.inputs, self.outputs, True)
         off_spring.next_node = self.next_node
 
         for i in range(len(self.nodes)):
