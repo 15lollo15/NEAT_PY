@@ -1,6 +1,3 @@
-import random
-
-from neat_py.genome import Genome
 from neat_py.population import Population
 
 X = [
